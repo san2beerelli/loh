@@ -18,8 +18,8 @@ jobs:
     - name: Install Packages
       run: npm install
     - name: Deploy to GH Pages
-      run: |
-        git config --global user.email "san2beerelli@gmail.com"
-        git config --global user.name "san2beerelli"
-        git remote set-url origin https://$USER_SECRET@github.com/san2beerelli/loh.git
-        npm run deploy
+      uses: JamesIves/github-pages-deploy-action@3.5.7
+      with:
+        GITHUB_TOKEN: ${{ secrets.USER_SECRET }}
+        BRANCH: master
+        FOLDER: build
