@@ -18,8 +18,8 @@ jobs:
     - name: Install Packages
       run: npm install
     - name: Deploy to GH Pages
-      uses: JamesIves/github-pages-deploy-action@3.5.7
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        GITHUB_TOKEN: ${{ secrets.USER_SECRET }}
-        BRANCH: master
-        FOLDER: build
+        github_token: ${{ secrets.USER_SECRET }}
+        publish_dir: ./build
+        publish_branch: master
