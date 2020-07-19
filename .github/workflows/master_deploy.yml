@@ -1,21 +1,26 @@
-name: Build and Deploy
+name: Deployment
 on:
   push:
     branches:
       - master
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: All things angular
-      uses: AhsanAyaz/angular-deploy-gh-pages-actions
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
       with:
-        github_access_token: ${{ secrets.USER_TOKEN }} # see the Configuration section for how you can create secrets
-        build_configuration: npm run build # The build environment for the app. please look configurations in your angular.json
-        base_href: https://san2beerelli.github.io/loh/   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
-        deploy_branch: master # The branch the action should deploy to.
-        build_folder: build # The folder where your project is supposed to be after running ng build by the action.
-
+        node-version: ${{ matrix.node-version }}
+    - name: Install Packages
+      run: npm install
+    - name: Build page
+      run: npm run build
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        publish_dir: ./build
